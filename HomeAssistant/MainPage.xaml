@@ -1,0 +1,44 @@
+﻿<Page
+    x:Class="Ben.HomeAssistant.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Ben.HomeAssistant"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Background="{ThemeResource AppBarBackgroundThemeBrush}" Padding="16,0">
+            <TextBlock FontWeight="Bold" Style="{StaticResource HeaderTextBlockStyle}">Settings</TextBlock>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}">Connection</TextBlock>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">URL</TextBlock>
+            <TextBox Text="{x:Bind ViewModel.HomeAssistantUrl, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Password</TextBlock>
+            <TextBox Text="{x:Bind ViewModel.Password, Mode=TwoWay}" />
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}">Notifications</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <ToggleSwitch x:Name="PushNotificationsToggle"  IsOn="{x:Bind ViewModel.PushNotificationsEnabled, Mode=OneWay}" OnContent="Enabled" OffContent="Disabled" Toggled="PushNotificationsToggled"/>
+                <ProgressRing x:Name="PushNotificationsToggleProgress" 
+                              Visibility="{x:Bind PushNotificationsToggle.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibility}, ConverterParameter=True}"
+                              IsActive="{x:Bind PushNotificationsToggle.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanInverter}}">
+                </ProgressRing>
+            </StackPanel>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Device Name</TextBlock>
+            <TextBox Text="{x:Bind ViewModel.DeviceName, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource CaptionTextBlockStyle}">Identifies this device in Home Assistant.  Used as the target to send push notifications to.  Defaults to an arbitrary device specific id.</TextBlock>
+
+            <Button Content="Test Toast" Margin="4" Padding="16,4" HorizontalAlignment="Center" Click="SendToast"/>
+        </StackPanel>
+
+        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Stretch="None"
+               Source="./Assets/loading-screen.gif" />
+    </Grid>
+</Page>
